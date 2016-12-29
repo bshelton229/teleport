@@ -23,7 +23,7 @@ RUN (locale-gen \
 	&& locale-gen en_US.UTF-8 \
 	&& dpkg-reconfigure locales)
 
-RUN apt-get -y update && apt-get -y upgrade 
+RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get install -q -y \
          libsqlite3-0 \
          curl \
@@ -36,9 +36,19 @@ RUN apt-get install -q -y \
          python \
          python-pip \
          libyaml-dev \
-         python-dev 
-RUN (pip install click==4.1 recommonmark mkdocs  markdown-include ;\
-     apt-get -y autoclean; apt-get -y clean)
+         python-dev \
+         ruby-dev \
+         ruby \
+    && apt-get -y autoclean && apt-get -y clean
+
+# Install ruby and python packages
+RUN pip install \
+        click==4.1 \
+        recommonmark \
+        mkdocs \
+        markdown-include \
+    && gem install --no-ri --no-rdoc \
+        fpm
 
 # Install Golang:
 RUN (mkdir -p /opt && cd /opt && curl https://storage.googleapis.com/golang/go1.7.linux-amd64.tar.gz | tar xz;\
